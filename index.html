@@ -199,19 +199,449 @@ body::after{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;o
 @media(max-width:860px){.proj-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:480px){.proj-grid{grid-template-columns:1fr;gap:8px;}}
 
-.proj-card{background:var(--s2);border:1px solid var(--b1);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;cursor:none;transition:border-color var(--t2) var(--spring),transform var(--t2) var(--spring),box-shadow var(--t2) var(--spring);}
-.proj-card:hover{border-color:rgba(10,132,255,.3);transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.5);}
-.proj-vis{height:160px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;}
-.proj-vis::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,.4));}
-.proj-info{padding:20px;flex:1;display:flex;flex-direction:column;gap:8px;}
-.proj-name{font-family:var(--FD);font-size:16px;font-weight:700;letter-spacing:-.03em;color:var(--w);line-height:1.2;}
-.proj-desc{font-size:13px;color:var(--w3);line-height:1.55;flex:1;}
-.proj-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;}
-.proj-tag{font-size:10px;font-weight:600;letter-spacing:.03em;padding:3px 8px;border-radius:999px;background:var(--bda);color:rgba(100,180,255,.75);border:1px solid rgba(10,132,255,.15);}
-.proj-foot{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 20px;border-top:1px solid var(--b1);}
-.proj-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--blue);cursor:none;}
-.proj-link svg{width:11px;height:11px;}
-.proj-link:hover{color:var(--b-2);}
+/* ========== PROJECT CARD IMAGE FIXES ========== */
+
+/* Fix all project card visual containers */
+.proj-vis {
+    height: 160px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--s2), var(--s1));
+    flex-shrink: 0;
+}
+
+/* Fix for actual images inside project cards */
+.proj-vis img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s var(--spring);
+}
+
+.proj-card:hover .proj-vis img {
+    transform: scale(1.03);
+}
+
+/* Ensure proper aspect ratio and prevent distortion */
+.proj-vis img,
+.proj-vis svg,
+.proj-vis video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* For cards without images (emoji fallback) */
+.proj-vis:has(img) {
+    background: transparent;
+}
+
+.proj-vis:not(:has(img)) {
+    background: linear-gradient(135deg, var(--s2), var(--s1));
+}
+
+/* Ensure consistent card structure */
+.proj-card {
+    background: var(--s2);
+    border: 1px solid var(--b1);
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    cursor: none;
+    transition: border-color var(--t2) var(--spring), transform var(--t2) var(--spring), box-shadow var(--t2) var(--spring);
+    height: 100%;
+}
+
+.proj-card:hover {
+    border-color: rgba(10, 132, 255, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Project info section */
+.proj-info {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Project name styling */
+.proj-name {
+    font-family: var(--FD);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--w);
+    line-height: 1.2;
+}
+
+/* Project description */
+.proj-desc {
+    font-size: 13px;
+    color: var(--w3);
+    line-height: 1.55;
+    flex: 1;
+}
+
+/* Tags container */
+.proj-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 4px;
+}
+
+/* Individual tag */
+.proj-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--bda);
+    color: rgba(100, 180, 255, 0.85);
+    border: 1px solid rgba(10, 132, 255, 0.15);
+}
+
+/* Project footer with link */
+.proj-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px 20px;
+    border-top: 1px solid var(--b1);
+    margin-top: auto;
+}
+
+/* Project link styling */
+.proj-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--blue);
+    cursor: none;
+    transition: gap var(--t1) var(--spring), color var(--t1);
+}
+
+.proj-link:hover {
+    color: var(--b-2);
+    gap: 8px;
+}
+
+.proj-link svg {
+    width: 11px;
+    height: 11px;
+    transition: transform 0.2s ease;
+}
+
+.proj-link:hover svg {
+    transform: translateX(2px);
+}
+
+/* ========== GRID LAYOUT IMPROVEMENTS ========== */
+
+/* Main project grid - 3 columns */
+.proj-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* Responsive grid for tablets */
+@media (max-width: 860px) {
+    .proj-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Responsive grid for mobile */
+@media (max-width: 480px) {
+    .proj-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+}
+
+/* Horizontal card layout for the extra 2 projects */
+.proj-card.horizontal {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+}
+
+.proj-card.horizontal .proj-vis {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    font-size: 28px;
+}
+
+.proj-card.horizontal .proj-vis img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.proj-card.horizontal .proj-info {
+    padding: 0;
+    flex: 1;
+}
+
+.proj-card.horizontal .proj-foot {
+    border-top: none;
+    padding: 0;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+/* ========== SIP SODA SPECIFIC FIXES ========== */
+
+/* Ensure SipSoda image displays correctly */
+.proj-card:first-child .proj-vis img {
+    object-fit: cover;
+    object-position: center top;
+}
+
+/* Alternative: if the image path needs adjustment */
+.proj-card .proj-vis img[src*="sipsoda"],
+.proj-card .proj-vis img[src*="SipSoda"] {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Fallback for broken images - add a stylish placeholder */
+.proj-vis img:not([src]), 
+.proj-vis img[src=""],
+.proj-vis img[src*="undefined"] {
+    display: none;
+}
+
+.proj-vis:has(img:not([src]), img[src=""], img[src*="undefined"]) {
+    background: linear-gradient(135deg, #0a0a2a, #1a1a2e);
+    position: relative;
+}
+
+.proj-vis:has(img:not([src]), img[src=""], img[src*="undefined"])::before {
+    content: "🎨";
+    position: absolute;
+    font-size: 32px;
+    opacity: 0.5;
+}
+
+/* ========== CONSISTENT CARD SIZING ========== */
+
+/* Ensure all cards have equal height within grid */
+.proj-grid,
+[style*="grid-template-columns: 1fr 1fr"] {
+    align-items: stretch;
+}
+
+.proj-card {
+    height: auto;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* For the extra 2 projects container */
+[style*="grid-template-columns: 1fr 1fr;gap:10px;margin-top:10px;"] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    margin-top: 10px !important;
+}
+
+/* Responsive for extra projects row */
+@media (max-width: 560px) {
+    [style*="grid-template-columns: 1fr 1fr;gap:10px;margin-top:10px;"] {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Style for horizontal cards in extra row */
+[style*="grid-template-columns: 1fr 1fr;gap:10px;margin-top:10px;"] .proj-card {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    min-height: auto;
+}
+
+[style*="grid-template-columns: 1fr 1fr;gap:10px;margin-top:10px;"] .proj-card > div:first-child {
+    font-size: 28px;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bda);
+    border-radius: 12px;
+}
+
+[style*="grid-template-columns: 1fr 1fr;gap:10px;margin-top:10px;"] .proj-info {
+    padding: 0;
+}
+
+[style*="grid-template-columns: 1fr 1fr;gap:10px;margin-top:10px;"] .proj-foot {
+    border-top: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* ========== ADDITIONAL POLISH ========== */
+
+/* Smooth transitions for all interactive elements */
+.proj-card,
+.proj-vis img,
+.proj-link,
+.proj-link svg {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Hover effect for project cards without image distortion */
+.proj-card:hover .proj-vis img {
+    transform: scale(1.05);
+}
+
+/* Ensure overlay doesn't affect images */
+.proj-vis::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.3));
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Make sure images are above the overlay */
+.proj-vis img {
+    position: relative;
+    z-index: 0;
+}
+
+/* Better image loading */
+.proj-vis img {
+    background: var(--s2);
+}
+
+/* Optional: Add loading shimmer effect */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.proj-vis img[loading="lazy"] {
+    background: linear-gradient(90deg, var(--s2) 0%, var(--s3) 50%, var(--s2) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+/* ========== FIX FOR SIP SODA SPECIFIC PROJECT ========== */
+
+/* Target the SipSoda card specifically if needed */
+.proj-card:first-child .proj-vis {
+    background: #0a0a0a;
+}
+
+.proj-card:first-child .proj-vis img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+/* If the image is missing, add a nice gradient background */
+.proj-card .proj-vis:has(img[src*="sipsoda.png"]:not([src*="http"])) {
+    background: linear-gradient(135deg, #1a2a3a, #0a1a2a);
+}
+
+/* ========== RESPONSIVE TOUCHUPS ========== */
+
+@media (max-width: 768px) {
+    .proj-vis {
+        height: 140px;
+    }
+    
+    .proj-info {
+        padding: 16px;
+    }
+    
+    .proj-foot {
+        padding: 12px 16px 16px;
+    }
+    
+    .proj-name {
+        font-size: 15px;
+    }
+    
+    .proj-desc {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .proj-vis {
+        height: 120px;
+    }
+    
+    .proj-info {
+        padding: 14px;
+    }
+    
+    .proj-foot {
+        padding: 10px 14px 14px;
+    }
+    
+    .proj-tag {
+        font-size: 9px;
+        padding: 2px 6px;
+    }
+}
+
+/* ========== ACCESSIBILITY IMPROVEMENTS ========== */
+
+.proj-card:focus-visible,
+.proj-link:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+    transform: translateY(-2px);
+}
+
+.proj-vis img:focus-visible {
+    outline: none;
+}
+
+/* Prevent image from causing layout shift on load */
+.proj-vis {
+    background-color: var(--s2);
+}
+
+/* Ensure text remains readable on all backgrounds */
+.proj-info,
+.proj-foot {
+    background: inherit;
+}
 
 /* ── CONTACT ── */
 #contact{background:var(--bg);}
@@ -519,7 +949,9 @@ body::after{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;o
     <div class="proj-grid">
 
       <div class="proj-card sr d1" onclick="window.open('https://usamabashir786.github.io/SipSoda./','_blank')">
-        <div class="proj-vis" style="background:linear-gradient(135deg,#0a0a00,#1a0800);">🥤</div>
+        <div class="proj-vis">
+            <img src="assets/sipsoda.png" alt="">
+        </div>
         <div class="proj-info">
           <div class="proj-name">Sip Soda</div>
           <div class="proj-desc">Branded premium soda product website with dark aesthetic, product showcase, and ordering flow.</div>
@@ -531,7 +963,7 @@ body::after{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;o
       </div>
 
       <div class="proj-card sr d2" onclick="window.open('https://usamabashir786.github.io/Welcome-Pizza-Restaurants-/','_blank')">
-        <div class="proj-vis" style="background:linear-gradient(135deg,#1a0300,#0a0800);">🍕</div>
+        <div class="proj-vis"><img src="assets/wlcpizza.png" alt=""></div>
         <div class="proj-info">
           <div class="proj-name">Welcome Pizza Restaurant</div>
           <div class="proj-desc">Restaurant website with menu showcase, contact info, and fully responsive layout.</div>
@@ -543,7 +975,7 @@ body::after{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;o
       </div>
 
       <div class="proj-card sr d3" onclick="window.open('https://usamabashir786.github.io/Taj-Mehal-Marquee/','_blank')">
-        <div class="proj-vis" style="background:linear-gradient(135deg,#0e0018,#04000a);">🏛️</div>
+        <div class="proj-vis"><img src="assets/tajMehal.png" alt=""></div>
         <div class="proj-info">
           <div class="proj-name">Taj Mahal Marquee</div>
           <div class="proj-desc">Event venue platform with service listings, gallery section, and booking details.</div>
@@ -555,7 +987,7 @@ body::after{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;o
       </div>
 
       <div class="proj-card sr d1" onclick="window.open('https://usamabashir786.github.io/Seek-Academy/','_blank')">
-        <div class="proj-vis" style="background:linear-gradient(135deg,#00100a,#00080a);">📚</div>
+        <div class="proj-vis"><img src="assets/Seek.png" alt=""></div>
         <div class="proj-info">
           <div class="proj-name">Seek Academy</div>
           <div class="proj-desc">Educational institution site with course listings, about section, and contact form.</div>
@@ -567,7 +999,9 @@ body::after{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;o
       </div>
 
       <div class="proj-card sr d2" onclick="window.open('https://usamabashir786.github.io/Resume-Builder/','_blank')">
-        <div class="proj-vis" style="background:linear-gradient(135deg,#001020,#000510);">📄</div>
+        <div class="proj-vis">
+            <img src="assets/resume.png" alt="">
+        </div>
         <div class="proj-info">
           <div class="proj-name">Resume Builder</div>
           <div class="proj-desc">Interactive tool for creating and downloading professional resumes directly in the browser.</div>
@@ -579,7 +1013,9 @@ body::after{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;o
       </div>
 
       <div class="proj-card sr d3" onclick="window.open('https://usamabashir786.github.io/Roadmap-Generator/','_blank')">
-        <div class="proj-vis" style="background:linear-gradient(135deg,#180018,#0a000e);">🗺️</div>
+        <div class="proj-vis">
+            <img src="assets/RoadmapGen.png" alt="">
+        </div>
         <div class="proj-info">
           <div class="proj-name">Roadmap Generator</div>
           <div class="proj-desc">Generates personalized learning roadmaps for different tech career paths interactively.</div>
@@ -591,7 +1027,9 @@ body::after{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;o
       </div>
 
       <div class="proj-card sr d1" onclick="window.open('https://usamabashir786.github.io/StudentTools/','_blank')">
-        <div class="proj-vis" style="background:linear-gradient(135deg,#001818,#000808);">🎒</div>
+        <div class="proj-vis">
+            <img src="assets/students.png" alt="">
+        </div>
         <div class="proj-info">
           <div class="proj-name">Student Tools</div>
           <div class="proj-desc">Productivity toolkit for students packed with academic utilities and helpers.</div>
@@ -603,7 +1041,9 @@ body::after{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;o
       </div>
 
       <div class="proj-card sr d2" onclick="window.open('https://usamabashir786.github.io/TradingSeekhloo/','_blank')">
-        <div class="proj-vis" style="background:linear-gradient(135deg,#001500,#000a00);">📈</div>
+        <div class="proj-vis">
+            <img src="assets/trading.png" alt="">
+        </div>
         <div class="proj-info">
           <div class="proj-name">Trading Seekhloo</div>
           <div class="proj-desc">Trading education platform with structured learning content and clean Tailwind UI.</div>
@@ -615,7 +1055,9 @@ body::after{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;o
       </div>
 
       <div class="proj-card sr d3" onclick="window.open('https://usamabashir786.github.io/SohailComputers/','_blank')">
-        <div class="proj-vis" style="background:linear-gradient(135deg,#000518,#00020a);">💻</div>
+        <div class="proj-vis">
+            <img src="assets/Sohail.png" alt="" srcset="">
+        </div>
         <div class="proj-info">
           <div class="proj-name">Sohail Computers</div>
           <div class="proj-desc">Business website for a computer hardware and services shop with product showcase.</div>
@@ -626,30 +1068,21 @@ body::after{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;o
         </div>
       </div>
 
+      <div class="proj-card sr d2" onclick="window.open('https://usamabashir786.github.io/TradingSeekhloo/','_blank')">
+        <div class="proj-vis">
+            <img src="assets/victoria.png" alt="">
+        </div>
+        <div class="proj-info">
+          <div class="proj-name">Victoria Marquee</div>
+          <div class="proj-desc">Marquee hall website with gallery and event details.</div>
+          <div class="proj-tags"><span class="proj-tag">HTML</span><span class="proj-tag">Tailwind</span></div>
+        </div>
+        <div class="proj-foot">
+          <a class="proj-link" href="https://usamabashir786.github.io/Victoria-Marque/" target="_blank">View Live <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+        </div>
+      </div>
     </div>
 
-    <!-- Extra 2 projects row -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
-
-      <div class="proj-card sr d1" style="flex-direction:row;align-items:center;gap:16px;padding:20px;" onclick="window.open('https://usamabashir786.github.io/Victoria-Marque/','_blank')">
-        <div style="font-size:28px;flex-shrink:0;">🌸</div>
-        <div style="flex:1;">
-          <div class="proj-name" style="font-size:14px;">Victoria Marquee</div>
-          <div class="proj-desc" style="font-size:12px;margin-top:4px;">Marquee hall website with gallery and event details.</div>
-        </div>
-        <a class="proj-link" href="https://usamabashir786.github.io/Victoria-Marque/" target="_blank" style="flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-      </div>
-
-      <div class="proj-card sr d2" style="flex-direction:row;align-items:center;gap:16px;padding:20px;" onclick="window.open('https://usamabashir786.github.io/Demo-Al-Wajid-Laptops/','_blank')">
-        <div style="font-size:28px;flex-shrink:0;">🖥️</div>
-        <div style="flex:1;">
-          <div class="proj-name" style="font-size:14px;">Al Wajid Computers</div>
-          <div class="proj-desc" style="font-size:12px;margin-top:4px;">Demo e-commerce site for laptop and computer store.</div>
-        </div>
-        <a class="proj-link" href="https://usamabashir786.github.io/Demo-Al-Wajid-Laptops/" target="_blank" style="flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-      </div>
-
-    </div>
 
     <div style="text-align:center;margin-top:40px;">
       <a href="https://github.com/usamabashir786" target="_blank" class="a-link" style="font-size:15px;">View all on GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
